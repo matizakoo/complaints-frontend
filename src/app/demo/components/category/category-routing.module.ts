@@ -4,8 +4,8 @@ import { CategoryComponent } from './category.component';
 
 const routes: Routes = [
     {
-        path: '', // ścieżka względem miejsca załadowania modułu
-        component: CategoryComponent // Komponent do wyrenderowania
+        path: '',
+        component: CategoryComponent
     }
 ];
 

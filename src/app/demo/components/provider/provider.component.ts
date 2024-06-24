@@ -1,42 +1,51 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {CategoryService} from "./category.service";
-import {Category} from "./category";
-import {ConfirmationService, Message, MessageService} from "primeng/api";
+import { Component } from '@angular/core';
+import {ButtonDirective} from "primeng/button";
+import {ConfirmDialogModule} from "primeng/confirmdialog";
+import {DialogModule} from "primeng/dialog";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {InputTextModule} from "primeng/inputtext";
+import {MessagesModule} from "primeng/messages";
+import {NgForOf, NgIf} from "@angular/common";
+import {ConfirmationService, Message, PrimeTemplate} from "primeng/api";
+import {Ripple} from "primeng/ripple";
+import {TableModule} from "primeng/table";
+import {Category} from "../category/category";
+import {CategoryService} from "../category/category.service";
 import {MessagesconfService} from "../../../messagesconf.service";
 import {HttpErrorResponse, HttpResponse} from "@angular/common/http";
 import {InfoDTO} from "../../../info-dto";
+import {ProviderService} from "./provider.service";
+import {Provider} from "./provider";
+
 @Component({
-  selector: 'app-category',
-  templateUrl: './category.component.html'
+  selector: 'app-provider',
+  templateUrl: './provider.component.html',
 })
-export class CategoryComponent implements OnInit{
+export class ProviderComponent {
     myForm: FormGroup;
     editForm: FormGroup;
     category: number;
-    categories: Category[] = [];
+    providers: Provider[] = [];
     msgs: Message[] = [];
-    categoryToRemove: Category;
-    categoryToRemoveName: string;
+    providerToRemove: Provider;
+    providerToRemoveName: string;
     statusCode: number;
     categoryDialog: boolean = false;
     temp:string;
 
     constructor(private fb: FormBuilder,
-                private categoryService: CategoryService,
+                private providerService: ProviderService,
                 private messageConf: MessagesconfService,
                 private confirmationService: ConfirmationService) { }
 
     ngOnInit(): void {
         this.myForm = this.fb.group({
-            provider: ['', [Validators.required, Validators.minLength(3)]]
+            category: ['', [Validators.required, Validators.minLength(3)]]
         });
 
         this.editForm = this.fb.group({
             category: ['', [Validators.required, Validators.minLength(3)]]
         });
-
-
 
         this.getCategories();
     }
@@ -52,18 +61,18 @@ export class CategoryComponent implements OnInit{
         });
     }
 
-
-
-    changingCategoryData(categoryToRemoveData: Category): void {
-        this.categoryToRemove = categoryToRemoveData;
-        this.categoryToRemoveName = categoryToRemoveData.category;
+    changingCategoryData(providerToRemoveData: Provider): void {
+        this.providerToRemove = providerToRemoveData;
+        this.providerToRemoveName = providerToRemoveData.nameOfProvider;
         this.categoryDialog = true;
     }
 
 
     onSubmit(): void {
+        console.log('xxx')
+        console.log('aa: ' + this.myForm.get('category').value)
         if (this.myForm.valid) {
-            this.categoryService.createCategory(this.editForm.get('category').value).subscribe(
+            this.providerService.createCategory(this.myForm.get('category').value).subscribe(
                 (response: HttpResponse<InfoDTO>) => {
                     this.statusCode = response.status;
                     this.msgs = this.messageConf.getMessage(this.statusCode);
@@ -86,9 +95,9 @@ export class CategoryComponent implements OnInit{
             this.msgs = this.messageConf.getMessage(404);
         }
     }
-    changeNameOfCategory(): void {
+    changeNameOfProvider(): void {
         if (this.editForm.valid) {
-            this.categoryService.changeNameOfCategory(this.categoryToRemove, this.editForm.get('category').value).subscribe(
+            this.providerService.changeNameOfCategory(this.providerToRemove, this.editForm.get('category').value).subscribe(
                 (response: HttpResponse<InfoDTO>) => {
                     this.statusCode = response.status;
                     this.msgs = this.messageConf.getMessage(this.statusCode);
@@ -115,7 +124,7 @@ export class CategoryComponent implements OnInit{
 
 
     async onDeleteCategory(id: bigint): Promise<void> {
-        this.categoryService.deleteCategory(id).subscribe(
+        this.providerService.deleteCategory(id).subscribe(
             (response: HttpResponse<any>) => {
                 this.statusCode = response.status;
                 this.msgs = this.messageConf.getMessage(this.statusCode);
@@ -129,9 +138,9 @@ export class CategoryComponent implements OnInit{
     }
 
     getCategories(): void {
-        this.categoryService.getCategories().subscribe({
-            next: (categories: Category[]) => {
-                this.categories = categories;
+        this.providerService.getCategories().subscribe({
+            next: (providers: Provider[]) => {
+                this.providers = providers;
             },
             error: (err) => {
                 console.error('Error fetching categories', err);

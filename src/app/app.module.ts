@@ -16,6 +16,8 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {AuthInterceptor} from "./demo/components/auth/auth.interceptor";
 import {ConfirmDialogModule} from "primeng/confirmdialog";
 import {ConfirmationService} from "primeng/api";
+import {ProviderComponent} from "./demo/components/provider/provider.component";
+import {ProviderModule} from "./demo/components/provider/provider.module";
 
 @NgModule({
     declarations: [AppComponent, NotfoundComponent],
@@ -25,6 +27,7 @@ import {ConfirmationService} from "primeng/api";
         ReactiveFormsModule,
         HttpClientModule,
         ConfirmDialogModule,
+        ProviderModule
     ],
     providers: [
         {

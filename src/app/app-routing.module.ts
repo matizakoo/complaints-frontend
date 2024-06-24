@@ -18,6 +18,7 @@ import {AuthModule} from "./demo/components/auth/auth.module";
                     { path: 'blocks', loadChildren: () => import('./demo/components/primeblocks/primeblocks.module').then(m => m.PrimeBlocksModule) },
                     { path: 'pages', loadChildren: () => import('./demo/components/pages/pages.module').then(m => m.PagesModule) },
                     { path: 'kategorie', loadChildren: () => import('./demo/components/category/category.module').then(m => m.CategoryModule) },
+                    { path: 'dostawcy', loadChildren: () => import('./demo/components/provider/provider.module').then(m => m.ProviderModule) },
                 ]
             },
             // {

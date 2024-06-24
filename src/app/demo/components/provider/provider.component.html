@@ -1,14 +1,14 @@
 <div class="card">
     <div class="col-12">
         <p-messages [value]="msgs"></p-messages>
-        <h3>Kategorie oraz zarządzanie</h3>
+        <h3>Dostawcy</h3>
         <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
             <div class="formgroup-inline">
                 <div class="field p-fluid">
-                    <label for="provider" class="p-sr-only">Category</label>
-                    <input pInputText id="provider" type="text" placeholder="Utwórz kategorie"
-                           formControlName="provider"/>
-                    <small *ngIf="myForm.get('provider').invalid && myForm.get('provider').touched" id="username-help"
+                    <label for="category" class="p-sr-only">Category</label>
+                    <input pInputText id="category" type="text" placeholder="Dodaj dostawcę"
+                           formControlName="category"/>
+                    <small *ngIf="myForm.get('category').invalid && myForm.get('category').touched" id="username-help"
                            class="p-error" style="width: 5px; display: none;">Enter your username to reset your
                         password.</small>
                 </div>
@@ -30,7 +30,7 @@
                         </th>
                         <th style="min-width: 12rem">
                             <div class="flex justify-content-between align-items-center">
-                                Kategoria produktu
+                                Dostawca
                             </div>
                         </th>
                         <th style="min-width: 12rem">
@@ -40,20 +40,20 @@
                         </th>
 
                     </tr>
-                    <tr *ngFor="let category of categories">
+                    <tr *ngFor="let provider of providers">
                         <th style="font-weight: normal;">
-                            {{category.id}}
+                            {{provider.id}}
                         </th>
                         <th style="font-weight: normal;">
-                            {{category.category}}
+                            {{provider.nameOfProvider}}
                         </th>
                         <th style="font-weight: normal;">
                             <div class="flex">
                                 <button pButton pRipple icon="pi pi-pencil"
                                         class="p-button-rounded p-button-success mr-2"
-                                        (click)="changingCategoryData(category)"></button>
+                                        (click)="changingCategoryData(provider)"></button>
                                 <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
-                                        (click)="confirmDeleteCategory(category.id)"></button>
+                                        (click)="confirmDeleteCategory(provider.id)"></button>
                             </div>
 
                         </th>
@@ -67,11 +67,10 @@
     </div>
 </div>
 
-<p-dialog [(visible)]="categoryDialog" [style]="{width: '450px'}"  header="Zmień nazwe produktu {{this.categoryToRemoveName}}" [modal]="true" class="p-fluid">
-
+<p-dialog [(visible)]="categoryDialog" [style]="{width: '450px'}" header="Zmień nazwe produktu {{this.providerToRemoveName}}" [modal]="true" class="p-fluid">
     <ng-template pTemplate="content">
         <div class="col-12">
-            <form [formGroup]="editForm" (ngSubmit)="changeNameOfCategory()">
+            <form [formGroup]="editForm" (ngSubmit)="changeNameOfProvider()">
                 <div class="formgroup-inline">
                     <div class="field">
                         <label for="category" class="p-sr-only">Category</label>

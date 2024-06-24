@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams, HttpResponse} from "@angular/common/http";
-import {catchError, Observable, tap, throwError} from "rxjs";
-import {Category} from "./category";
-import {map} from "rxjs/operators";
+import {catchError, Observable, throwError} from "rxjs";
 import {InfoDTO} from "../../../info-dto";
+import {map} from "rxjs/operators";
+import {Category} from "../category/category";
+import {Provider} from "./provider";
 
 @Injectable({
   providedIn: 'root'
 })
-export class CategoryService {
-    private apiUrl = 'http://localhost:8080/category';
+export class ProviderService {
+    private apiUrl = 'http://localhost:8080/provider';
 
     constructor(private http: HttpClient) { }
 
@@ -22,10 +23,10 @@ export class CategoryService {
             );
     }
 
-    changeNameOfCategory(category: Category, newCategoryName: string): Observable<HttpResponse<InfoDTO>> {
-        console.log('category starcie ostateczne: ' + category.category)
-        let params = new HttpParams().set('newCategoryName', newCategoryName)
-        return this.http.patch<InfoDTO>(`${this.apiUrl}`, category, { params, observe: 'response' })
+    changeNameOfCategory(provider: Provider, newProviderName: string): Observable<HttpResponse<InfoDTO>> {
+        console.log('category starcie ostateczne: ' + provider.nameOfProvider)
+        let params = new HttpParams().set('newCategoryName', newProviderName)
+        return this.http.patch<InfoDTO>(`${this.apiUrl}`, provider, { params, observe: 'response' })
             .pipe(
                 map(response => response),
                 catchError(this.handleError)
@@ -48,7 +49,7 @@ export class CategoryService {
         return throwError(() => new Error('Failed to create category. Please try again later.'));
     }
 
-    getCategories(): Observable<Category[]> {
-        return this.http.get<Category[]>(this.apiUrl);
+    getCategories(): Observable<Provider[]> {
+        return this.http.get<Provider[]>(this.apiUrl);
     }
 }

@@ -44,14 +44,15 @@ export class LoginComponent implements OnInit {
                 .login(this.loginForm.value.username, this.loginForm.value.password)
                 .pipe(take(1))
                 .subscribe((response) => {
+                    console.log('1')
                     localStorage.setItem(
                         'auth-token',
                         response.headers.get('auth-token') || ''
                     );
                     if (localStorage.getItem('auth-token') !== '') {
                         this.isLoggedIn = true;
-                        window.location.reload();
                     }
+                    window.location.reload();
                 });
         }
 

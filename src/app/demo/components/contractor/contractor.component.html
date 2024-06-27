@@ -1,12 +1,12 @@
 <div class="card">
     <div class="col-12">
         <p-messages [value]="msgs"></p-messages>
-        <h3>Kategorie</h3>
+        <h3>Kontrahenci</h3>
         <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
             <div class="formgroup-inline">
                 <div class="field p-fluid">
                     <label for="provider" class="p-sr-only">Category</label>
-                    <input pInputText id="provider" type="text" placeholder="Utwórz kategorie"
+                    <input pInputText id="provider" type="text" placeholder="Utwórz kontrahenta"
                            formControlName="provider"/>
                     <small *ngIf="myForm.get('provider').invalid && myForm.get('provider').touched" id="username-help"
                            class="p-error" style="width: 5px; display: none;">Enter your username to reset your
@@ -30,7 +30,7 @@
                         </th>
                         <th style="min-width: 12rem">
                             <div class="flex justify-content-between align-items-center">
-                                Kategoria produktu
+                                Kontrahent
                             </div>
                         </th>
                         <th style="min-width: 12rem">
@@ -45,7 +45,7 @@
                             {{category.id}}
                         </th>
                         <th style="font-weight: normal;">
-                            {{category.category}}
+                            {{category.contractorName}}
                         </th>
                         <th style="font-weight: normal;">
                             <div class="flex">
@@ -74,13 +74,9 @@
             <form [formGroup]="editForm" (ngSubmit)="changeNameOfCategory()">
                 <div class="formgroup-inline">
                     <div class="field">
-                        <label for="category" class="p-sr-only">Category</label>
-                        <input pInputText id=categoryedit type="text" placeholder="Zmień nazwe kategorii"
+                        <label for="categoryedit" class="p-sr-only">Category</label>
+                        <input pInputText id=categoryedit type="text" placeholder="Zmień nazwe kontrahenta"
                                formControlName="category"/>
-                        <small *ngIf="myForm.get('category').invalid && myForm.get('category').touched" id="categoryToChangeName"
-                               class="p-error" style="width: 5px; display: none;">Enter your username to reset your
-                            password.</small>
-
                     </div>
                     <button pButton label="Zmień" type="submit" style="width: 120px;"></button>
                 </div>

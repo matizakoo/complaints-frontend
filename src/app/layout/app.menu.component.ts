@@ -20,10 +20,17 @@ export class AppMenuComponent implements OnInit {
                     { label: 'Strona główna', icon: 'pi pi-fw pi-home', routerLink: ['/'] },
                     { label: 'Kategorie', icon: 'pi pi-fw pi-tags', routerLink: ['/kategorie'] },
                     { label: 'Dostawcy', icon: 'pi pi-fw pi-share-alt', routerLink: ['/dostawcy'] },
+                    { label: 'Kontrahenci', icon: 'pi pi-fw pi-share-alt', routerLink: ['/kontrahenci'] },
                 ]
             },
             {
                 label: 'Reklamacje',
+                items: [
+                    { label: 'Reklamacje', icon: 'pi pi-fw pi-id-card', routerLink: ['/reklamacje'] },
+                ]
+            },
+            {
+                label: 'Components',
                 items: [
                     { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
                     { label: 'Input', icon: 'pi pi-fw pi-check-square', routerLink: ['/uikit/input'] },

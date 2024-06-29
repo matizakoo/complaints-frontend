@@ -6,7 +6,7 @@ import {InputTextModule} from "primeng/inputtext";
 import {DropdownModule} from "primeng/dropdown";
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {ButtonModule} from "primeng/button";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {TableModule} from "primeng/table";
 import {ToggleButtonModule} from "primeng/togglebutton";
 import {MultiSelectModule} from "primeng/multiselect";
@@ -17,6 +17,9 @@ import {ConfirmDialogModule} from "primeng/confirmdialog";
 import {DialogModule} from "primeng/dialog";
 import {ConfirmationService, MessageService} from "primeng/api";
 import {ComplaintComponent} from "./complaint.component";
+import {CalendarModule} from "primeng/calendar";
+import {RatingModule} from "primeng/rating";
+import {ToastModule} from "primeng/toast";
 
 
 @NgModule({
@@ -37,6 +40,10 @@ import {ComplaintComponent} from "./complaint.component";
         Ripple,
         ConfirmDialogModule,
         DialogModule,
+        CalendarModule,
+        FormsModule,
+        RatingModule,
+        ToastModule,
     ],
     providers: [MessageService, ConfirmationService]
 })

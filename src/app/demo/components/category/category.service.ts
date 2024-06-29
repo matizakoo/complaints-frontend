@@ -32,16 +32,12 @@ export class CategoryService {
             );
     }
 
-
-
     deleteCategory(data: any): Observable<any> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.delete<any>(this.apiUrl, { headers, body:data, observe: 'response' as 'response' }).pipe(
             catchError(this.handleError)
         );
     }
-
-
 
     private handleError(error: HttpErrorResponse) {
         console.error('Server error:', error);

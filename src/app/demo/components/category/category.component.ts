@@ -52,8 +52,6 @@ export class CategoryComponent implements OnInit{
         });
     }
 
-
-
     changingCategoryData(categoryToRemoveData: Category): void {
         this.categoryToRemove = categoryToRemoveData;
         this.categoryToRemoveName = categoryToRemoveData.category;
@@ -63,7 +61,7 @@ export class CategoryComponent implements OnInit{
 
     onSubmit(): void {
         if (this.myForm.valid) {
-            this.categoryService.createCategory(this.editForm.get('category').value).subscribe(
+            this.categoryService.createCategory(this.myForm.get('provider').value).subscribe(
                 (response: HttpResponse<InfoDTO>) => {
                     this.statusCode = response.status;
                     this.msgs = this.messageConf.getMessage(this.statusCode);

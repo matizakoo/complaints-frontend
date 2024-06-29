@@ -18,6 +18,7 @@ import {ConfirmDialogModule} from "primeng/confirmdialog";
 import {ConfirmationService} from "primeng/api";
 import {ProviderComponent} from "./demo/components/provider/provider.component";
 import {ProviderModule} from "./demo/components/provider/provider.module";
+import {TooltipModule} from "primeng/tooltip";
 
 @NgModule({
     declarations: [AppComponent, NotfoundComponent],
@@ -27,7 +28,8 @@ import {ProviderModule} from "./demo/components/provider/provider.module";
         ReactiveFormsModule,
         HttpClientModule,
         ConfirmDialogModule,
-        ProviderModule
+        ProviderModule,
+        TooltipModule
     ],
     providers: [
         {

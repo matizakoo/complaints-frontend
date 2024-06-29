@@ -11,7 +11,7 @@ import {Complaint} from "./complaint";
 import {ComplaintService} from "./complaint.service";
 import {HttpErrorResponse, HttpResponse} from "@angular/common/http";
 import {InfoDTO} from "../../../info-dto";
-import {Message} from "primeng/api";
+import {ConfirmationService, Message} from "primeng/api";
 import {MessagesconfService} from "../../../messagesconf.service";
 
 interface expandedRows {
@@ -35,8 +35,9 @@ export class ComplaintComponent implements OnInit{
     complaint: Complaint;
     statusCode: number;
     msgs: Message[] = [];
+    isExpanded: boolean = false;
+    expandedRows: {[key: string]: boolean} = {};
 
-    expandedRows: expandedRows = {};
 
 
     constructor(private fb: FormBuilder,
@@ -44,8 +45,8 @@ export class ComplaintComponent implements OnInit{
                 private contractorService: ContractorService,
                 private providerService: ProviderService,
                 private complaintService: ComplaintService,
-                private messageConf: MessagesconfService) {}
-
+                private messageConf: MessagesconfService,
+                private confirmationService: ConfirmationService) {}
     ngOnInit(): void {
         this.myForm = this.fb.group({
             factureId: ['', [Validators.required, Validators.minLength(3)]],
@@ -66,6 +67,55 @@ export class ComplaintComponent implements OnInit{
         this.getContractors();
         this.getProviders();
         this.getAllComplaints();
+    }
+
+    toggleRow(complaint: any) {
+        if (this.expandedRows[complaint.id]) {
+            delete this.expandedRows[complaint.id];
+        } else {
+            this.expandedRows = {};
+            this.expandedRows[complaint.id] = true;
+        }
+    }
+
+    confirmDeleteCategory(id: number, fv: string): void {
+        console.log(id)
+        this.confirmationService.confirm({
+            message: 'Czy na pewno chcesz usunąć reklamcję o numerze faktury: ' + fv + '?',
+            acceptLabel: 'Tak',
+            rejectLabel: 'Nie',
+            accept: () => {
+                this.onDeleteComplaint(id);
+            }
+        });
+        this.getAllComplaints();
+    }
+
+    async onDeleteComplaint(id: number): Promise<void> {
+        this.complaintService.deleteComplaint(id).subscribe(
+            (response: HttpResponse<any>) => {
+                this.statusCode = response.status;
+                this.msgs = this.messageConf.getMessage(this.statusCode);
+                this.getAllComplaints();
+            },
+            error => {
+                this.statusCode = error.status;
+                this.msgs = this.messageConf.getMessage(this.statusCode);
+            }
+        );
+    }
+
+    getTooltipText(status: string): string {
+        switch (status) {
+            case 'REALIZOWANE':
+                return 'Zgłoszenie jest realizowane';
+            case 'NOWE':
+                return 'Czeka na odpowiedź';
+            case 'GOTOWE':
+                return 'Zakończone';
+            default:
+                return 'Nieznany status';
+        }
     }
 
     getAllComplaints(): void {
@@ -140,12 +190,13 @@ export class ComplaintComponent implements OnInit{
             );
 
             this.myForm.reset();
-            this.getAllComplaints();
         } else {
             console.log('xxx')
             this.msgs = this.messageConf.getMessage(404);
             this.complaintDialog = true;
         }
+        this.getAllComplaints();
+        this.complaintDialog = false;
     }
 
     getFormValidationErrors() {

@@ -36,8 +36,6 @@ export class CategoryComponent implements OnInit{
             category: ['', [Validators.required, Validators.minLength(3)]]
         });
 
-
-
         this.getCategories();
     }
 

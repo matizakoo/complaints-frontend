@@ -68,24 +68,20 @@
     </div>
 </div>
 
-<p-dialog [(visible)]="categoryDialog" [style]="{width: '450px'}"  header="Zmień nazwe produktu {{this.categoryToRemoveName}}" [modal]="true" class="p-fluid">
-
+<p-dialog [(visible)]="categoryDialog" [style]="{width: '450px'}" header="Zmień nazwę produktu {{categoryToRemoveName}}" [modal]="true" class="p-fluid">
     <ng-template pTemplate="content">
         <div class="col-12">
             <form [formGroup]="editForm" (ngSubmit)="changeNameOfCategory()">
                 <div class="formgroup-inline">
                     <div class="field">
-                        <label for="category" class="p-sr-only">Category</label>
-                        <input pInputText id=categoryedit type="text" placeholder="Zmień nazwe kategorii"
+                        <label for="categoryedit" class="p-sr-only">Category</label>
+                        <input pInputText id="categoryedit" type="text" placeholder="Zmień nazwę kategorii"
                                formControlName="category"/>
-                        <small *ngIf="myForm.get('category').invalid && myForm.get('category').touched" id="categoryToChangeName"
-                               class="p-error" style="width: 5px; display: none;">Enter your username to reset your
-                            password.</small>
-
                     </div>
-                    <button pButton label="Zmień" type="submit" style="width: 120px;"></button>
+                    <button pButton label="Zmień" type="submit" class="p-element p-button p-component" style="width: 120px; margin-top: 0px;"></button>
                 </div>
             </form>
         </div>
     </ng-template>
 </p-dialog>
+

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpResponse} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse} from "@angular/common/http";
 import {catchError, Observable, throwError} from "rxjs";
 import {InfoDTO} from "../../../info-dto";
 import {map} from "rxjs/operators";
@@ -22,6 +22,16 @@ export class ComplaintService {
                 catchError(this.handleError)
             );
     }
+
+    deleteComplaint(data: any): Observable<any> {
+        const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.delete<any>(this.apiUrl, { headers, body:data, observe: 'response' as 'response' }).pipe(
+            catchError(this.handleError)
+        );
+    }
+
+
+
     getComplaints(): Observable<Complaint[]> {
         return this.http.get<Complaint[]>(this.apiUrl);
     }

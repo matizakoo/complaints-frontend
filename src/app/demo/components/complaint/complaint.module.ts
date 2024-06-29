@@ -20,6 +20,7 @@ import {ComplaintComponent} from "./complaint.component";
 import {CalendarModule} from "primeng/calendar";
 import {RatingModule} from "primeng/rating";
 import {ToastModule} from "primeng/toast";
+import {TooltipModule} from "primeng/tooltip";
 
 
 @NgModule({
@@ -44,6 +45,7 @@ import {ToastModule} from "primeng/toast";
         FormsModule,
         RatingModule,
         ToastModule,
+        TooltipModule,
     ],
     providers: [MessageService, ConfirmationService]
 })

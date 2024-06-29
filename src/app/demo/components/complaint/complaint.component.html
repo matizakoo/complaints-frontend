@@ -1,92 +1,99 @@
 <div class="card">
-        <div class="col-12 p-0">
-            <!--            <p-messages [value]="msgs"></p-messages>-->
-            <div class="formgroup-inline">
-                <button pButton label="Dodaj zgłoszenie" type="submit" (click)="openAddComplaintModal();"></button>
-            </div>
-        </div>
-
+    <p-messages [value]="msgs"></p-messages>
     <div class="col-12 p-0">
-            <h5>Row Expand</h5>
-            <p-toast></p-toast>
-            <p-table [value]="complaints" dataKey="name" [expandedRowKeys]="expandedRows" responsiveLayout="scroll">
-<!--                <ng-template pTemplate="caption">-->
-<!--                    <button pButton icon="pi pi-fw {{isExpanded ? 'pi-minus' : 'pi-plus'}}" label="{{isExpanded ? 'Collapse All' : 'Expand All'}}" (click)="expandAll()"></button>-->
-<!--                    <div class="flex table-header">-->
-<!--                    </div>-->
-<!--                </ng-template>-->
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th style="width: 1rem"></th>
-                        <th pSortableColumn="name">Numer faktury</th>
-                        <th pSortableColumn="price">Data zgłoszenia</th>
-                        <th pSortableColumn="category">Data odpowiedzi</th>
-                        <th pSortableColumn="rating">Data zakupu</th>
-                        <th pSortableColumn="rating">Kod produktu</th>
-                        <th pSortableColumn="rating">Kontrahent</th>
-                        <th pSortableColumn="rating">Kategoria</th>
-                        <th pSortableColumn="rating">Dostawca</th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-complaint let-expanded="expanded">
-                    <tr>
-                        <td>
-                            <button type="button" pButton pRipple [pRowToggler]="complaint" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-                        </td>
-                        <td style="min-width: 12rem;">{{complaint.factureId}}</td>
-                        <td style="min-width: 12rem;">{{complaint.dataOfReport}}</td>
-                        <td style="min-width: 12rem;">{{complaint.dataOfReportAnswer}}</td>
-                        <td style="min-width: 12rem;">{{complaint.dateOfPurchase}}</td>
-                        <td style="min-width: 12rem;">{{complaint.productCode}}</td>
-                        <td style="min-width: 12rem;">{{complaint.contractorEntity.contractorName}}</td>
-                        <td style="min-width: 12rem;">{{complaint.categoryEntity.category}}</td>
-                        <td style="min-width: 12rem;">{{complaint.providerEntity.nameOfProvider}}</td>
-                    </tr>
-                </ng-template>
-<!--                <ng-template pTemplate="rowexpansion" let-product>-->
-<!--                    <tr>-->
-<!--                        <td colspan="7">-->
-<!--                            <div class="p-3">-->
-<!--                                <p-table [value]="product.orders" dataKey="id" responsiveLayout="scroll">-->
-<!--                                    <ng-template pTemplate="header">-->
-<!--                                        <tr>-->
-<!--                                            <th pSortableColumn="id">Id <p-sortIcon field="price"></p-sortIcon></th>-->
-<!--                                            <th pSortableColumn="customer">Customer <p-sortIcon field="customer"></p-sortIcon></th>-->
-<!--                                            <th pSortableColumn="date">Date <p-sortIcon field="date"></p-sortIcon></th>-->
-<!--                                            <th pSortableColumn="amount">Amount <p-sortIcon field="amount"></p-sortIcon></th>-->
-<!--                                            <th pSortableColumn="stats">Status <p-sortIcon field="status"></p-sortIcon></th>-->
-<!--                                            <th style="width: 4rem"></th>-->
-<!--                                        </tr>-->
-<!--                                    </ng-template>-->
-<!--                                    <ng-template pTemplate="body" let-order>-->
-<!--                                        <tr>-->
-<!--                                            <td>{{order.id}}</td>-->
-<!--                                            <td>{{order.customer}}</td>-->
-<!--                                            <td>{{order.date}}</td>-->
-<!--                                            <td>{{order.amount | currency:'USD'}}</td>-->
-<!--                                            <td><span [class]="'order-badge order-' + order.status.toLowerCase()">{{order.status}}</span></td>-->
-<!--                                            <td><p-button type="button" icon="pi pi-search"></p-button></td>-->
-<!--                                        </tr>-->
-<!--                                    </ng-template>-->
-<!--                                    <ng-template pTemplate="emptymessage">-->
-<!--                                        <tr>-->
-<!--                                            <td colspan="6">There are no order for this product yet.</td>-->
-<!--                                        </tr>-->
-<!--                                    </ng-template>-->
-<!--                                </p-table>-->
-<!--                            </div>-->
-<!--                        </td>-->
-<!--                    </tr>-->
-<!--                </ng-template>-->
-            </p-table>
+        <!--            <p-messages [value]="msgs"></p-messages>-->
+        <div class="formgroup-inline">
+            <button pButton label="Dodaj zgłoszenie" type="submit" (click)="openAddComplaintModal();"></button>
         </div>
+    </div>
+    <div class="mb-2"></div>
+    <div class="col-12 p-0">
+        <p-confirmDialog></p-confirmDialog>
+        <p-toast></p-toast>
+        <p-table [value]="complaints" dataKey="id" [expandedRowKeys]="expandedRows" responsiveLayout="scroll">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th></th>
+                    <th>Numer faktury</th>
+                    <th>Data zgłoszenia</th>
+                    <th>Data odpowiedzi</th>
+                    <th>Data zakupu</th>
+                    <th>Kod produktu</th>
+                    <th>Kontrahent</th>
+                    <th>Kategoria</th>
+                    <th>Dostawca</th>
+                    <th>Operacje</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-complaint let-expanded="expanded">
+                <tr>
+                    <td>
+                        <button type="button" pButton pRipple (click)="toggleRow(complaint)"
+                                class="p-button-text p-button-rounded p-button-plain"
+                                [icon]="expandedRows[complaint.id] ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+                        </button>
+
+                    </td>
+                    <td style="min-width: 3rem;">{{complaint.factureId}}</td>
+                    <td style="min-width: 3rem;">{{complaint.dataOfReport}}</td>
+                    <td style="min-width: 3rem;">{{complaint.dataOfReportAnswer}} &nbsp;
+                        <i class="pi" [ngClass]="{
+                      'true-icon pi-check-circle text-green-500': complaint.status === 'GOTOWE',
+                      'false-icon pi-times-circle text-pink-500': complaint.status === 'NOWE',
+                      'pi-refresh text-yellow-500': complaint.status === 'REALIZOWANE'}"
+                        [pTooltip]="getTooltipText(complaint.status)"
+                           tooltipPosition="top"
+                        >
+                        </i>
+                    </td>
+                    <td style="min-width: 3rem;">{{complaint.dateOfPurchase}}</td>
+                    <td style="min-width: 3rem;">{{complaint.productCode}}</td>
+                    <td style="min-width: 3rem;">{{complaint.contractorEntity.contractorName}}</td>
+                    <td style="min-width: 3rem;">{{complaint.categoryEntity.category}}</td>
+                    <td style="min-width: 3rem;">{{complaint.providerEntity.nameOfProvider}}</td>
+                    <td style="min-width: 3rem;">
+                        <div class="flex">
+                            <button pButton pRipple icon="pi pi-pencil"
+                                    [pTooltip]="'Dodaj notatkę'"
+                                    tooltipPosition="top"
+                                    class="p-button-rounded p-button-success mr-2">
+                            </button>
+                            <button pButton pRipple icon="pi pi-arrows-h"
+                                    [pTooltip]="'Zmień status'"
+                                    tooltipPosition="top"
+                                    class="p-button-rounded p-button-secondary mr-2">
+                            </button>
+                            <button pButton pRipple icon="pi pi-trash"
+                                    [pTooltip]="'Usuń reklamacje'"
+                                    tooltipPosition="top"
+                                    (click)="confirmDeleteCategory(complaint.id, complaint.factureId)"
+                                    class="p-button-rounded p-button-warning mr-2">
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="rowexpansion" let-complaint>
+                <tr *ngIf="expandedRows[complaint.id]">
+                    <td colspan="9">
+                        <div class="p-3">
+                            {{ complaint.username }}
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+
+        </p-table>
+    </div>
 </div>
 
-<p-dialog [(visible)]="complaintDialog" [style]="{width: '1150px', height: '600px'}"  header="Utwórz nową reklamację" [modal]="true" class="p-fluid">
+<p-dialog [(visible)]="complaintDialog" [style]="{width: '1150px', height: '550px'}" header="Utwórz nową reklamację"
+          [modal]="true" class="p-fluid">
 
     <ng-template pTemplate="content">
         <div class="col-12 p-0">
-            <p-messages [value]="msgs"></p-messages>
+
             <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
                 <div class="grid p-fluid mt-3">
                     <div class="field col-12 md:col-3">
@@ -223,7 +230,7 @@
                 </span>
                     </div>
                 </div>
-                <button pButton label="Utwórz reklamację" type="submit"></button>
+                <button pButton label="Utwórz reklamację" type="submit" class="mt-8"></button>
             </form>
         </div>
     </ng-template>

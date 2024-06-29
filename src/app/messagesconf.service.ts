@@ -23,7 +23,7 @@ export class MessagesconfService {
             case 400:
                 return [{severity: 'error', summary: 'Błąd', detail: 'Wystąpił błąd'}];
             default:
-                return [{ severity: 'info', summary: 'Powiadomienie', detail: 'Czy wszystko jest ok?' }];
+                return [{ severity: 'info', summary: 'Powiadomienie', detail: 'Nie można wykonać operacji' }];
         }
     }
 

@@ -49,6 +49,12 @@ export class LoginComponent implements OnInit {
                         'auth-token',
                         response.headers.get('auth-token') || ''
                     );
+
+                    localStorage.setItem(
+                        'principal',
+                        this.loginForm.value.username
+                    );
+
                     if (localStorage.getItem('auth-token') !== '') {
                         this.isLoggedIn = true;
                     }

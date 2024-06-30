@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams, HttpResponse} from "@angular/common/http";
 import {catchError, Observable, throwError} from "rxjs";
 import {InfoDTO} from "../../../info-dto";
 import {map} from "rxjs/operators";
@@ -17,6 +17,37 @@ export class ComplaintService {
 
     createComplaint(complaint: Complaint): Observable<HttpResponse<InfoDTO>> {
         return this.http.post<InfoDTO>(`${this.apiUrl}`, complaint , { observe: 'response' })
+            .pipe(
+                map(response => response),
+                catchError(this.handleError)
+            );
+    }
+
+    addComplaintNote(id: number, noteContent: string): Observable<HttpResponse<InfoDTO>> {
+      console.log('id: ' + id)
+      console.log('note: ' + noteContent)
+        let params = new HttpParams()
+            .set('id', id)
+            .set('noteContent', noteContent)
+            .set('principal', localStorage.getItem('principal'))
+        return this.http.post<InfoDTO>(`${this.apiUrl + '/note'}`, {} , { params, observe: 'response' })
+            .pipe(
+                map(response => response),
+                catchError(this.handleError)
+            );
+    }
+
+
+
+    patchComplaintStatus(id: number, status: string): Observable<HttpResponse<InfoDTO>> {
+      console.log('stautzz: ' + status)
+        let params = new HttpParams()
+            .set('id', id)
+            .set('status', status)
+
+        // const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+        return this.http.patch<InfoDTO>(`${this.apiUrl}`, {}, { params, observe: 'response' })
             .pipe(
                 map(response => response),
                 catchError(this.handleError)

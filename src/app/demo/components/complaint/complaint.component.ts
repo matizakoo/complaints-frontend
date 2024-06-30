@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Category} from "../category/category";
 import {CategoryService} from "../category/category.service";
@@ -13,6 +13,7 @@ import {HttpErrorResponse, HttpResponse} from "@angular/common/http";
 import {InfoDTO} from "../../../info-dto";
 import {ConfirmationService, Message} from "primeng/api";
 import {MessagesconfService} from "../../../messagesconf.service";
+import {Table} from "primeng/table";
 
 interface expandedRows {
     [key: string]: boolean;
@@ -37,6 +38,19 @@ export class ComplaintComponent implements OnInit{
     msgs: Message[] = [];
     isExpanded: boolean = false;
     expandedRows: {[key: string]: boolean} = {};
+    complaintstatus = [
+        { label: 'NOWE', value: 'NOWE' },
+        { label: 'REALIZOWANE', value: 'REALIZOWANE' },
+        { label: 'GOTOWE', value: 'GOTOWE' }
+    ];
+    changeComplaintStatus: boolean = false;
+    factureId: string;
+    selectedStatus: string;
+    statusIdName: number;
+    addNote: boolean = false;
+    addNoteId: number;
+    noteContent: string;
+    @ViewChild('filter') filter!: ElementRef;
 
 
 
@@ -69,6 +83,50 @@ export class ComplaintComponent implements OnInit{
         this.getAllComplaints();
     }
 
+    openComplaintAddNote(id: number) {
+        this.addNote = true;
+        this.addNoteId = id;
+    }
+
+    addComplaintNote() {
+        console.log('notki: ' + this.addNoteId + ' ' + this.noteContent)
+        this.complaintService.addComplaintNote(this.addNoteId, this.noteContent).subscribe(
+            (response: HttpResponse<any>) => {
+                this.statusCode = response.status;
+                this.msgs = this.messageConf.getMessage(this.statusCode);
+                this.getAllComplaints();
+            },
+            error => {
+                this.statusCode = error.status;
+                this.msgs = this.messageConf.getMessage(this.statusCode);
+            }
+        );
+        this.changeComplaintStatus = false;
+        this.addNote = false;
+    }
+
+    chaningComplaintStatus(id: number, name:string) {
+        this.changeComplaintStatus = true;
+        this.factureId = name;
+        this.statusIdName = id;
+    }
+
+    changeComplaintStatusMeth() {
+        console.log('x')
+        this.complaintService.patchComplaintStatus(this.statusIdName, this.selectedStatus).subscribe(
+            (response: HttpResponse<any>) => {
+                this.statusCode = response.status;
+                this.msgs = this.messageConf.getMessage(this.statusCode);
+                this.getAllComplaints();
+            },
+            error => {
+                this.statusCode = error.status;
+                this.msgs = this.messageConf.getMessage(this.statusCode);
+            }
+        );
+        this.changeComplaintStatus = false;
+    }
+
     toggleRow(complaint: any) {
         if (this.expandedRows[complaint.id]) {
             delete this.expandedRows[complaint.id];
@@ -81,7 +139,7 @@ export class ComplaintComponent implements OnInit{
     confirmDeleteCategory(id: number, fv: string): void {
         console.log(id)
         this.confirmationService.confirm({
-            message: 'Czy na pewno chcesz usunąć reklamcję o numerze faktury: ' + fv + '?',
+            message: 'Czy na pewno chcesz usunąć reklamcję o numerze faktury ' + fv + '?',
             acceptLabel: 'Tak',
             rejectLabel: 'Nie',
             accept: () => {
@@ -264,5 +322,16 @@ export class ComplaintComponent implements OnInit{
         this.selectedProvider = event.value;
     }
 
+    onStatusChange(event: any) {
+        this.selectedStatus = event.value.value;
+    }
 
+    onGlobalFilter(table: Table, event: Event) {
+        table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+    }
+
+    clear(table: Table) {
+        table.clear();
+        this.filter.nativeElement.value = '';
+    }
 }

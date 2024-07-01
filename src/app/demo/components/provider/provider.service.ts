@@ -33,7 +33,9 @@ export class ProviderService {
             );
     }
 
-
+    commonProvider(): Observable<string> {
+        return this.http.get(this.apiUrl + '/commonProvider', { responseType: 'text' });
+    }
 
     deleteCategory(data: any): Observable<any> {
         const headers = new HttpHeaders({ 'Content-Type': 'application/json' });

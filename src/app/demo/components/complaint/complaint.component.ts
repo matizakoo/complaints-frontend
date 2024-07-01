@@ -50,7 +50,13 @@ export class ComplaintComponent implements OnInit{
     addNote: boolean = false;
     addNoteId: number;
     noteContent: string;
+    info: boolean = false;
     @ViewChild('filter') filter!: ElementRef;
+
+    username: string;
+    surname: string;
+    email: string;
+    phone: string;
 
 
 
@@ -81,6 +87,14 @@ export class ComplaintComponent implements OnInit{
         this.getContractors();
         this.getProviders();
         this.getAllComplaints();
+    }
+
+    openInfo(username: string,  surname: string,  email: string, phone: string) {
+        this.info = true;
+        this.username = username;
+        this.surname = surname;
+        this.email = email;
+        this.phone = phone;
     }
 
     openComplaintAddNote(id: number) {
@@ -236,6 +250,7 @@ export class ComplaintComponent implements OnInit{
                     if (response.body && response.body.info) {
                         this.msgs.push({ severity: 'info', summary: 'Info', detail: response.body.info });
                     }
+                    this.getAllComplaints();
                 },
                 (error: HttpErrorResponse) => {
                     this.statusCode = error.status;

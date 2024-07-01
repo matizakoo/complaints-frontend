@@ -14,10 +14,12 @@
                  [globalFilterFields]="['factureId', 'dataOfReport', 'dataOfReportAnswer', 'dateOfPurchase', 'productCode', 'contractorEntity.contractorName', 'categoryEntity.category', 'providerEntity.nameOfProvider','complaint.username']">
             <ng-template pTemplate="caption">
                 <div class="flex justify-content-between flex-column sm:flex-row">
-                    <button pButton label="Clear" class="p-button-outlined mb-2" icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
+                    <button pButton label="Wyczyść" class="p-button-outlined mb-2" icon="pi pi-filter-slash"
+                            (click)="clear(dt1)"></button>
                     <span class="p-input-icon-left mb-2">
 							<i class="pi pi-search"></i>
-							<input pInputText type="text" #filter (input)="onGlobalFilter(dt1, $event)" placeholder="Search Keyword" class="w-full"/>
+							<input pInputText type="text" #filter (input)="onGlobalFilter(dt1, $event)"
+                                   placeholder="Szukaj" class="w-full"/>
 						</span>
                 </div>
             </ng-template>
@@ -40,7 +42,8 @@
                     <td>
                         <button type="button" pButton pRipple (click)="toggleRow(complaint)"
                                 class="p-button-text p-button-rounded p-button-plain"
-                                [icon]="expandedRows[complaint.id] ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+                                [icon]="expandedRows[complaint.id] ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                                [disabled]="!complaint.notes || complaint.notes.length === 0">
                         </button>
 
                     </td>
@@ -51,7 +54,7 @@
                       'true-icon pi-check-circle text-green-500': complaint.status === 'GOTOWE',
                       'false-icon pi-times-circle text-pink-500': complaint.status === 'NOWE',
                       'pi-refresh text-yellow-500': complaint.status === 'REALIZOWANE'}"
-                        [pTooltip]="getTooltipText(complaint.status)"
+                           [pTooltip]="getTooltipText(complaint.status)"
                            tooltipPosition="top"
                         >
                         </i>
@@ -81,6 +84,13 @@
                                     (click)="confirmDeleteCategory(complaint.id, complaint.factureId)"
                                     class="p-button-rounded p-button-warning mr-2">
                             </button>
+                            <button pButton pRipple icon="pi pi-info"
+                                    [pTooltip]="'Informacje'"
+                                    tooltipPosition="top"
+                                    (click)="openInfo(complaint.username, complaint.surname, complaint.email, complaint.phoneNumber)"
+                                    class="p-button-rounded p-button-info mr-2">
+                            </button>
+
                         </div>
                     </td>
                 </tr>
@@ -92,7 +102,8 @@
                         <div class="p-3">
                             <div *ngFor="let note of complaint.notes">
                                 <div>
-                                    <p><strong>Twórca wpisu:</strong> {{ note.publisher }}, {{ note.dateTime | date: 'short' }}</p>
+                                    <p><strong>Twórca wpisu:</strong> {{ note.publisher }}
+                                        , {{ note.dateTime | date: 'short' }}</p>
                                     <p><strong>Treść:</strong> {{ note.note }}</p>
                                 </div>
                                 <hr>
@@ -106,11 +117,43 @@
     </div>
 </div>
 
-<p-dialog [(visible)]="changeComplaintStatus" [style]="{width: '450px', height: '275px'}" header="Zmień status dla faktury {{factureId}}" [modal]="true" class="p-fluid">
+<p-dialog [(visible)]="info" [style]="{width: '450px', height: '195px'}" header="Info"
+          [modal]="true" class="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="col-12 p-0 mt-2">
+            <div class="formgroup-inline">
+                <div class="col-12 md:col-6">
+                            <span class="p-float-label">
+                                Imie: {{username}}
+                            </span>
+                </div>
+                <div class="col-12 md:col-6">
+                            <span class="p-float-label">
+                                Nazwisko: {{surname}}
+                            </span>
+                </div>
+                <div class="col-12 md:col-6">
+                            <span class="p-float-label">
+                                Email: {{email}}
+                            </span>
+                </div>
+                <div class="col-12 md:col-6">
+                            <span class="p-float-label">
+                                Numer telefonu: {{phone}}
+                            </span>
+                </div>
+
+            </div>
+        </div>
+    </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="changeComplaintStatus" [style]="{width: '450px', height: '275px'}"
+          header="Zmień status dla faktury {{factureId}}" [modal]="true" class="p-fluid">
     <ng-template pTemplate="content">
         <div class="col-12">
-                <div class="formgroup-inline">
-                        <div class="col-12 md:col-6">
+            <div class="formgroup-inline">
+                <div class="col-12 md:col-6">
                             <span class="p-float-label">
                                 <p-dropdown inputId="complaintStatusChange"
                                             [autoDisplayFirst]="false"
@@ -121,10 +164,11 @@
                                 ></p-dropdown>
                                 <label for="complaintStatusChange">Kontrahent</label>
                             </span>
-                        </div>
-                    <button pButton label="Zmień" type="submit" class="p-element p-button p-component" style="width: 120px; margin-top: 15px;"
-                    (click)="changeComplaintStatusMeth()"></button>
                 </div>
+                <button pButton label="Zmień" type="submit" class="p-element p-button p-component"
+                        style="width: 120px; margin-top: 15px;"
+                        (click)="changeComplaintStatusMeth()"></button>
+            </div>
         </div>
     </ng-template>
 </p-dialog>
@@ -135,10 +179,12 @@
             <div class="formgroup-inline">
                 <div class="col-12 md:col-12 p-0 mt-1">
                             <span class="p-float-label">
-                                <textarea rows="5" cols="30" placeholder="Your Message" pInputTextarea [(ngModel)]="noteContent"></textarea>
+                                <textarea rows="5" cols="30" placeholder="Notatka" pInputTextarea
+                                          [(ngModel)]="noteContent"></textarea>
                             </span>
                 </div>
-                <button pButton label="Dodaj notatke" type="submit" class="p-element p-button p-component" style="width: 130px; margin-top: 15px;"
+                <button pButton label="Dodaj notatke" type="submit" class="p-element p-button p-component"
+                        style="width: 130px; margin-top: 15px;"
                         (click)="addComplaintNote()"></button>
             </div>
         </div>

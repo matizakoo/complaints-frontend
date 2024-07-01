@@ -52,4 +52,10 @@ export class ContractorService {
     getCategories(): Observable<Contractor[]> {
         return this.http.get<Contractor[]>(this.apiUrl);
     }
+
+    getCommonContractor(): Observable<string> {
+        return this.http.get(this.apiUrl + '/commonContractor', { responseType: 'text' });
+    }
+
+
 }
